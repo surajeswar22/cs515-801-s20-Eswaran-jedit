@@ -393,7 +393,10 @@ new-plain-view.icon.small=16x16/actions/window-new.png
 close-view.icon.small=16x16/actions/document-close.png
 
 #{{{ Scrolling menu
-scrolling=scroll-to-current-line \
+scrolling=enable-scroll \
+      disable-scroll \
+      - \
+      scroll-to-current-line \
 	  center-caret \
 	  scroll-and-center \
 	  - \
@@ -1012,4 +1015,3 @@ install-plugins.clear-plugin-set.icon=22x22/actions/edit-clear.png
 #}}}
 
 errorwidget.popupmenu=logs-remove-all-errors
-
