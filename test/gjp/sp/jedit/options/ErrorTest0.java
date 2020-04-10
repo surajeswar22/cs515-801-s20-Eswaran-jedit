@@ -14,5 +14,6 @@ public class ErrorTest0 {
         // during test generation this statement threw an exception of type java.lang.NullPointerException in error
         java.awt.Color color0 = org.gjt.sp.jedit.options.GutterOptionPane.getSelectionAreaBackground();
     }
+
 }
 
