@@ -19,6 +19,7 @@ public class RegressionTest0 {
     public void test02() throws Throwable {
         if (debug)
             System.out.format("%n%s%n", "RegressionTest0.test02");
+       
         float float0 = java.awt.Component.LEFT_ALIGNMENT;
         org.junit.Assert.assertTrue("'" + float0 + "' != '" + 0.0f + "'", float0 == 0.0f);
     }
