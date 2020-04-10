@@ -26,6 +26,7 @@ public class RegressionTest0 {
     @Test
     public void test03() throws Throwable {
         if (debug)
+            
             System.out.format("%n%s%n", "RegressionTest0.test03");
         int int0 = javax.swing.JComponent.WHEN_FOCUSED;
         org.junit.Assert.assertTrue("'" + int0 + "' != '" + 0 + "'", int0 == 0);
