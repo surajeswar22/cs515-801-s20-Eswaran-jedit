@@ -72,11 +72,9 @@ import org.gjt.sp.util.ThreadUtilities;
  *
  * @author Slava Pestov
  * @author kpouer (rafactoring into standalone text area)
- * @version $Id: TextArea.java 24491 2016-08-09 22:16:29Z daleanson $
- *
- * @modified Suraj Eswaran
+ * @version $Id$
  */
-public abstract class TextArea extends JPanel
+public class TextArea extends JPanel
 {
 	//{{{ TextArea constructor
 	/**
@@ -84,12 +82,15 @@ public abstract class TextArea extends JPanel
 	 * @param propertyManager the property manager that contains informations like shortcut bindings
 	 * @param inputHandlerProvider the inputHandlerProvider
 	 */
+	private String toUpper = "UPPER";
+	private String toLower = "LOWER";
+
 	protected TextArea(IPropertyManager propertyManager, InputHandlerProvider inputHandlerProvider)
 	{
 		this.inputHandlerProvider = inputHandlerProvider;
-		enableEvents(AWTEvent.FOCUS_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);// AWTEven Class is the root event class for all AWT classes. enableEvents() is to select for event types not selected by registered listeners.
+		enableEvents(AWTEvent.FOCUS_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
 
-		//Starting some miscellenous stuff
+		//{{{ Initialize some misc. stuff
 		selectionManager = new SelectionManager(this);
 		chunkCache = new ChunkCache(this);
 		painter = new TextAreaPainter(this);
@@ -103,7 +104,7 @@ public abstract class TextArea extends JPanel
 		structureMatchers.add(new StructureMatcher.BracketMatcher());
 		//}}}
 
-		//Starting the GUI
+		//{{{ Initialize the GUI
 		setLayout(new ScrollLayout());
 		add(ScrollLayout.CENTER,painter);
 		add(ScrollLayout.LEFT,gutter);
@@ -713,18 +714,6 @@ public abstract class TextArea extends JPanel
 		setFirstLine(getFirstLine() + getVisibleLines()
 				- (lastLinePartial ? 1 : 0));
 	} //}}}
-
-	// Chamge Request :  Implementation of enabling scroll and disabling scroll
-	//@Modified by Suraj Eswaran
-
-	public void Scrollenable(){
-		horizontal.setVisible(true);
-		vertical.setVisible(true);
-	}
-	public void Scrolldisable(){
-		horizontal.setVisible(false);
-		vertical.setVisible(false);
-	}
 
 	//{{{ scrollToCaret() method
 	/**
@@ -1639,8 +1628,8 @@ public abstract class TextArea extends JPanel
 		}
 
 		// Scan backwards, trying to find a bracket
-		String openBrackets = "([{«‹⟨⌈⌊⦇⟦⦃";
-		String closeBrackets = ")]}»›⟩⌉⌋⦈⟧⦄";
+		String openBrackets = "([{芦鈥光煥鈱堚寠猞団煢猞�";
+		String closeBrackets = ")]}禄鈥衡煩鈱夆寢猞堚煣猞�";
 		int count = 1;
 		char openBracket = '\0';
 		char closeBracket = '\0';
@@ -2331,24 +2320,6 @@ public abstract class TextArea extends JPanel
 	{
 		return caretLine;
 	} //}}}
-
-	/* Prashant - Adding Change #1 */
-
-	public int getCaretWord()
-	{
-		String data = buffer.getText(0,getCaretPosition());
-		String[] dataArray = data.trim().split("\\s+");
-		return dataArray.length;
-	}
-
-	public int getWordCount()
-	{
-		String data = buffer.getText();
-		String[] dataArray = data.trim().split("\\s+");
-		return dataArray.length;
-	}
-
-	/* End */
 
 	//{{{ getMagicCaretPosition() method
 	/**
@@ -4400,12 +4371,12 @@ public abstract class TextArea extends JPanel
 		buffer.endCompoundEdit();
 	} //}}}
 
-	//{{{ toUpperCase() method
 	/**
 	 * Converts the selected text to upper case.
 	 * @since jEdit 2.7pre2
 	 */
-	public void toUpperCase()
+//@Manual Refactoring
+	public void toUpperORLowerCase(String toCase)
 	{
 		if(!buffer.isEditable())
 		{
@@ -4431,8 +4402,15 @@ public abstract class TextArea extends JPanel
 
 		buffer.beginCompoundEdit();
 
+
 		for (Selection s : selection)
-			setSelectedText(s, getSelectedText(s).toUpperCase());
+		{
+			if (toCase == toUpper)
+				setSelectedText(s, getSelectedText(s).toUpperCase());
+			if (toCase == toLower)
+				setSelectedText(s, getSelectedText(s).toLowerCase());
+		}
+
 
 		buffer.endCompoundEdit();
 		if (caret != -1)
@@ -4444,39 +4422,39 @@ public abstract class TextArea extends JPanel
 	 * Converts the selected text to lower case.
 	 * @since jEdit 2.7pre2
 	 */
-	public void toLowerCase()
-	{
-		if(!buffer.isEditable())
-		{
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
-			return;
-		}
-
-		Selection[] selection = getSelection();
-		int caret = -1;
-		if (selection.length == 0)
-		{
-			caret = getCaretPosition();
-			selectWord();
-			selection = getSelection();
-		}
-		if (selection.length == 0)
-		{
-			if (caret != -1)
-				setCaretPosition(caret);
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
-			return;
-		}
-
-		buffer.beginCompoundEdit();
-
-		for (Selection s : selection)
-			setSelectedText(s, getSelectedText(s).toLowerCase());
-
-		buffer.endCompoundEdit();
-		if (caret != -1)
-			setCaretPosition(caret);
-	} //}}}
+//	public void toLowerCase()
+//	{
+//		if(!buffer.isEditable())
+//		{
+//			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
+//			return;
+//		}
+//
+//		Selection[] selection = getSelection();
+//		int caret = -1;
+//		if (selection.length == 0)
+//		{
+//			caret = getCaretPosition();
+//			selectWord();
+//			selection = getSelection();
+//		}
+//		if (selection.length == 0)
+//		{
+//			if (caret != -1)
+//				setCaretPosition(caret);
+//			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
+//			return;
+//		}
+//
+//		buffer.beginCompoundEdit();
+//
+//		for (Selection s : selection)
+//			setSelectedText(s, getSelectedText(s).toLowerCase());
+//
+//		buffer.endCompoundEdit();
+//		if (caret != -1)
+//			setCaretPosition(caret);
+//	} //}}}
 
 	//{{{ removeTrailingWhiteSpace() method
 	/**
@@ -6775,5 +6753,10 @@ public abstract class TextArea extends JPanel
 		{
 			return painter;
 		}
+	}
+
+	public void toggleScrollbars(boolean show){
+		vertical.setVisible(show);
+		horizontal.setVisible(show);
 	}
 }
