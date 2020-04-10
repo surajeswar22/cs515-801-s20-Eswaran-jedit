@@ -171,7 +171,7 @@ public class MarkerViewer extends JPanel implements ActionListener
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JList<Marker> markerList;
+	public JList<Marker> markerList;
 	private JScrollPane markerListScroller;
 	private View view;
 	private RolloverButton previous;
@@ -200,20 +200,6 @@ public class MarkerViewer extends JPanel implements ActionListener
 			clear.setEnabled(false);
 		}
 
-	} //}}}
-
-	//{{{ goToSelectedMarker() method
-	private void goToSelectedMarker()
-	{
-		Object value = markerList.getSelectedValue();
-		if(!(value instanceof Marker))
-			return;
-
-		Marker mark = (Marker)value;
-		view.getTextArea().setCaretPosition(mark.getPosition());
-		view.toFront();
-		view.requestFocus();
-		view.getTextArea().requestFocus();
 	} //}}}
 
 	//{{{ updateSelection() method
@@ -281,7 +267,7 @@ public class MarkerViewer extends JPanel implements ActionListener
 			int index = markerList.locationToIndex(evt.getPoint());
 			markerList.setSelectedIndex(index);
 
-			goToSelectedMarker();
+			view.goToSelectedMarker(MarkerViewer.this);
 		}
 	} //}}}
 	
@@ -295,7 +281,7 @@ public class MarkerViewer extends JPanel implements ActionListener
 			   || evt.getKeyCode() == KeyEvent.VK_ENTER)
 			{
 				evt.consume();
-				goToSelectedMarker();
+				view.goToSelectedMarker(MarkerViewer.this);
 			}
 		}
 	} //}}}
